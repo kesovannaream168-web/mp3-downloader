@@ -40,11 +40,15 @@ def download():
 
     try:
         ydl_opts = {
-            'format': 'bestaudio/best',
-            'outtmpl': os.path.join(DOWNLOAD_FOLDER, '%(title)s.%(ext)s'),
-            'quiet': True,
-            'noplaylist': True
-        }
+    'format': 'bestaudio/best',
+    'postprocessors': [{
+        'key': 'FFmpegExtractAudio',
+        'preferredcodec': 'mp3',
+        'preferredquality': '192',
+    }],
+    'outtmpl': 'downloads/%(title)s.%(ext)s',
+    'cookiefile': 'cookies.txt',  # <--- Add this line!
+}
         
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
