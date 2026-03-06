@@ -9,7 +9,11 @@ app = Flask(__name__)
 DOWNLOAD_FOLDER = 'downloads'
 if not os.path.exists(DOWNLOAD_FOLDER):
     os.makedirs(DOWNLOAD_FOLDER)
-
+# Check if cookies.txt exists for debugging
+if os.path.exists('cookies.txt'):
+    print("✅ cookies.txt found in root directory")
+else:
+    print("❌ cookies.txt NOT FOUND in root directory")
 def convert_to_mp3(input_file, title, artist):
     # Sanitize title to remove characters that might break file systems
     clean_title = "".join([c for c in title if c.isalnum() or c in (' ', '.', '_')]).strip()
