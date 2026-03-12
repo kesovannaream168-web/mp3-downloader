@@ -7,8 +7,6 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.12
-      - key: YOUTUBE_OAUTH_TOKEN
-        sync: false # You will paste the actual token value in the Render Dashboard UI
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
