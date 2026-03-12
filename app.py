@@ -5,7 +5,6 @@ from flask import Flask, render_template, request, send_from_directory
 
 app = Flask(__name__)
 
-# Ensure the download folder exists
 DOWNLOAD_FOLDER = 'downloads'
 if not os.path.exists(DOWNLOAD_FOLDER):
     os.makedirs(DOWNLOAD_FOLDER)
@@ -41,14 +40,11 @@ def download():
         ydl_opts = {
             'format': 'bestaudio/best',
             'outtmpl': 'downloads/%(title)s.%(ext)s',
+            'cookiefile': 'cookies.txt', # Back to cookies, but with a twist
             'nocheckcertificate': True,
-            # OAuth2 replaces the cookiefile line
-            'username': 'oauth2',
-            'password': '', 
-            'add_header': [
-                'Accept-Language: en-US,en;q=0.9',
-            ],
-            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            # Force the 'web' client to bypass the OAuth rejection
+            'extractor_args': {'youtube': {'player_client': ['web']}},
+            'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
         }
         
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
