@@ -1,23 +1,18 @@
-# Use a Python base image
-FROM python:3.9-slim
+# Use a newer Python base image
+FROM python:3.10-slim
 
-# Install FFmpeg and other system dependencies
-RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+# Install system dependencies for ffmpeg
+RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
 WORKDIR /app
 
-# Copy and install Python requirements
+# Copy requirements and install
 COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the app code
+# Copy the rest of the application
 COPY . .
 
-# Create the downloads folder inside the container
-RUN mkdir -p downloads
-
-# Run the app
-CMD ["python", "app.py"]
+# Start the application
+CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app"]
