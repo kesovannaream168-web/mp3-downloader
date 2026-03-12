@@ -9,12 +9,13 @@ app = Flask(__name__)
 DOWNLOAD_FOLDER = 'downloads'
 if not os.path.exists(DOWNLOAD_FOLDER):
     os.makedirs(DOWNLOAD_FOLDER)
-# Check if cookies.txt exists for debugging
+
+# Check if cookies.txt exists for debugging on Render
 if os.path.exists('cookies.txt'):
     print("✅ cookies.txt found in root directory")
 else:
     print("❌ cookies.txt NOT FOUND in root directory")
-cookie_path = 'cookies.txt' if os.path.exists('cookies.txt') else None
+
 def convert_to_mp3(input_file, title, artist):
     # Sanitize title to remove characters that might break file systems
     clean_title = "".join([c for c in title if c.isalnum() or c in (' ', '.', '_')]).strip()
@@ -45,18 +46,17 @@ def download():
 
     try:
         ydl_opts = {
-    'format': 'bestaudio/best',
-    'postprocessors': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '192',
-    }],
-    'outtmpl': 'downloads/%(title)s.%(ext)s',
-    'cookiefile': 'cookies.txt',
-    # ADD THESE TWO LINES BELOW
-    'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    'nocheckcertificate': True,
-}
+            'format': 'bestaudio/best',
+            # We let yt-dlp handle the initial download; convert_to_mp3 handles the final tagging
+            'outtmpl': 'downloads/%(title)s.%(ext)s',
+            'cookiefile': 'cookies.txt',
+            'nocheckcertificate': True,
+            # CRITICAL: Bypassing "Bot" detection
+            'user_agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+            'extractor_args': {'youtube': {'player_client': ['web_safari']}},
+            'quiet': False,
+            'no_warnings': False,
+        }
         
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
@@ -64,19 +64,20 @@ def download():
             uploader = info.get('uploader', 'Unknown Artist')
             downloaded_file = ydl.prepare_filename(info)
 
-        # Convert to MP3 with dynamic artist
+        # Convert to MP3 with dynamic artist and custom tagging
         mp3_filename = convert_to_mp3(downloaded_file, title, uploader)
         
-        # Cleanup original video/audio file
+        # Cleanup original temporary file (usually .webm or .m4a)
         if os.path.exists(downloaded_file):
             os.remove(downloaded_file)
 
         return send_from_directory(DOWNLOAD_FOLDER, mp3_filename, as_attachment=True)
 
     except Exception as e:
+        # Logs the specific error (like the Bot error) to the Render console
+        print(f"Detailed Error: {str(e)}")
         return f"Error: {str(e)}", 500
 
 if __name__ == '__main__':
-    # The 'int(os.environ.get("PORT", 5000))' part is for the Cloud!
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 10000))
     app.run(host='0.0.0.0', port=port)
