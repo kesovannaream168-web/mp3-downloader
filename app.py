@@ -25,22 +25,20 @@ def download():
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': outtmpl,
-        'cookiefile': 'cookies.txt',  # Uses your uploaded cookies.txt
-        'noplaylist': True,            # Prevents the "playlist" error from your logs
+        'cookiefile': 'cookies.txt',
+        'noplaylist': True,
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
-        # Extra arguments to mimic a real browser session
         'extractor_args': {
             'youtube': {
                 'skip': ['authcheck', 'webpage_download'],
                 'player_client': ['android', 'web']
             }
         },
-        'quiet': False,
-        'no_warnings': False,
     }
 
     try:
