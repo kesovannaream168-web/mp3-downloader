@@ -23,12 +23,11 @@ def download():
     outtmpl = os.path.join(download_path, '%(title)s.%(ext)s')
 
     ydl_opts = {
-        # This tells yt-dlp to be more flexible in finding audio streams
         'format': 'bestaudio/best',
         'outtmpl': outtmpl,
         'cookiefile': 'cookies.txt',
         'noplaylist': True,
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
@@ -37,9 +36,9 @@ def download():
         'extractor_args': {
             'youtube': {
                 'skip': ['authcheck', 'webpage_download'],
-                # Using 'ios' often provides streams that are easier for cloud servers to access
                 'player_client': ['android', 'web', 'ios'],
-                'po_token': ['web+missing_pot']
+                # This helps bypass the "Sign in" bot check on cloud servers
+                'po_token': ['web+missing_pot'] 
             }
         },
     }
