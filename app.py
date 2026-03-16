@@ -23,7 +23,7 @@ def download():
     outtmpl = os.path.join(download_path, '%(title)s.%(ext)s')
 
     ydl_opts = {
-        'format': 'bestaudio/best',
+        'format': 'bestaudio/best','formats': 'missing_pot',
         'outtmpl': outtmpl,
         'cookiefile': 'cookies.txt',
         'noplaylist': True,
