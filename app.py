@@ -23,6 +23,7 @@ def download():
     outtmpl = os.path.join(download_path, '%(title)s.%(ext)s')
 
     ydl_opts = {
+        # 'bestaudio' remains the standard, but we add more bypass logic below
         'format': 'bestaudio/best',
         'outtmpl': outtmpl,
         'cookiefile': 'cookies.txt',
@@ -36,9 +37,10 @@ def download():
         'extractor_args': {
             'youtube': {
                 'skip': ['authcheck', 'webpage_download'],
-                'player_client': ['android', 'web', 'ios'],
-                # This helps bypass the "Sign in" bot check on cloud servers
-                'po_token': ['web+missing_pot'] 
+                # Adding 'ios' and 'mweb' provides more reliable audio streams
+                'player_client': ['android', 'ios', 'mweb'],
+                # This is the current 2026 bypass for cloud server blocks
+                'po_token': ['web+missing_pot']
             }
         },
     }
