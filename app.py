@@ -23,7 +23,8 @@ def download():
     outtmpl = os.path.join(download_path, '%(title)s.%(ext)s')
 
     ydl_opts = {
-        'format': 'bestaudio/best',
+        # Changed to be more flexible with audio formats
+        'format': 'bestaudio/best', 
         'outtmpl': outtmpl,
         'cookiefile': 'cookies.txt',
         'noplaylist': True,
@@ -33,6 +34,8 @@ def download():
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
+        # Added to allow ffmpeg to handle conversion better
+        'keepvideo': False, 
         'extractor_args': {
             'youtube': {
                 'skip': ['authcheck', 'webpage_download'],
