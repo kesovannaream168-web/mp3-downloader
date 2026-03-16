@@ -23,7 +23,7 @@ def download():
     outtmpl = os.path.join(download_path, '%(title)s.%(ext)s')
 
     ydl_opts = {
-        # Combine the "bestaudio" and "missing_pot" logic properly
+        # This tells yt-dlp to be more flexible in finding audio streams
         'format': 'bestaudio/best',
         'outtmpl': outtmpl,
         'cookiefile': 'cookies.txt',
@@ -37,8 +37,9 @@ def download():
         'extractor_args': {
             'youtube': {
                 'skip': ['authcheck', 'webpage_download'],
-                'player_client': ['android', 'web', 'ios'], # Added 'ios' for more options
-                'po_token': ['web+missing_pot'] # This is the more accurate way to use the POT bypass
+                # Using 'ios' often provides streams that are easier for cloud servers to access
+                'player_client': ['android', 'web', 'ios'],
+                'po_token': ['web+missing_pot']
             }
         },
     }
