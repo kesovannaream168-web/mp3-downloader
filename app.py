@@ -23,21 +23,20 @@ def download():
     outtmpl = os.path.join(download_path, '%(title)s.%(ext)s')
 
     ydl_opts = {
-        # Changed to be more flexible with audio formats
-        'format': 'bestaudio/best', 
+        'format': 'bestaudio/best',
         'outtmpl': outtmpl,
         'cookiefile': 'cookies.txt',
         'noplaylist': True,
+        # This line is crucial for bypassing the bot check
         'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
-        # Added to allow ffmpeg to handle conversion better
-        'keepvideo': False, 
         'extractor_args': {
             'youtube': {
+                # These arguments help bypass "Sign in" requirements
                 'skip': ['authcheck', 'webpage_download'],
                 'player_client': ['android', 'web']
             }
