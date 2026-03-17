@@ -34,7 +34,8 @@ def download():
         }],
         'extractor_args': {
             'youtube': {
-                'player_client': ['ios', 'mweb', 'android'],
+                # Focusing on 'ios' helps bypass the '429' and 'format not available' errors
+                'player_client': ['ios'], 
                 'skip': ['authcheck'],
                 'po_token': ['web+missing_pot']
             }
