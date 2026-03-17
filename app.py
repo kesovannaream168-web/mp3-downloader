@@ -40,6 +40,8 @@ def download():
                 'skip': ['authcheck'],
                 # YOUR TOKEN APPLIED HERE
                 'po_token': ['web+Cgtqb2Zla1lkd0ppdyjM8OLNBjIKCgJLSBIEGgAgRGLfAgrcAjE2LllUPTVNSmIxQVV4ZHVMczNIN0JXZWo5RVlYS0pmaVMtNUMxNzRJNWIzRXJXQnZVYWh2Ml9fWmJFRDNYYUtzR0p6SXFMbU0xVXFFVTliZVF2Mnh6bGxxZ29heWxheUFXLVVwT3R2OGRwaklSSW53NGdRaW9ZV293aXRrNXVEa1lBWkJnNkxJMjV5QVlYb2MwUVY4QVZiWjdHN3lmYjRIb1RkR0x3TWxPR3IydG5ITXQ3dmY3cjNHLWRVdUhLUngwdTZfTVFteWVSNEtQeDhzY1Y5VG83WlhtejFSZEhVT29Nam9EWmZyQkhDU01pa1lLYkNyZGtzaWlWSncxbzdkMllYLV83UVBweGFPT09ONDI3a2tzQmpkQ3VPNkJLeWJEYUMyVDFrUG12S1ZPTXhlU2dfT0dvREc1dEVVcHFFWFZzeHFpTzVSanNSSEFCQk9ZWWJfbDdINW1Vdw%3D%3D'],
+                # Standard visitor data to match web client
+                'visitor_data': 'CgtxV293aXRrNXVEay4=', 
             }
         },
     }
