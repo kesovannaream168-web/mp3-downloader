@@ -28,8 +28,9 @@ def download():
         'format': 'bestaudio/best',
         'outtmpl': outtmpl,
         'noplaylist': True,
-        # Using a mobile User-Agent is harder for YouTube to block
-        'user_agent': 'com.google.android.youtube/19.05.36 (Linux; U; Android 14; en_US; Pixel 8 Pro) gzip',
+        # POINT TO YOUR UPLOADED COOKIE FILE
+        'cookiefile': 'youtube.com_cookies.txt', 
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
@@ -37,10 +38,8 @@ def download():
         }],
         'extractor_args': {
             'youtube': {
-                # We switch to 'android' and 'ios' clients instead of 'web'
-                'player_client': ['android', 'ios'],
+                'player_client': ['web'],
                 'skip': ['authcheck'],
-                # Keep your token here
                 'po_token': ['web+Cgtqb2Zla1lkd0ppdyjM8OLNBjIKCgJLSBIEGgAgRGLfAgrcAjE2LllUPTVNSmIxQVV4ZHVMczNIN0JXZWo5RVlYS0pmaVMtNUMxNzRJNWIzRXJXQnZVYWh2Ml9fWmJFRDNYYUtzR0p6SXFMbU0xVXFFVTliZVF2Mnh6bGxxZ29heWxheUFXLVVwT3R2OGRwaklSSW53NGdRaW9ZV293aXRrNXVEa1lBWkJnNkxJMjV5QVlYb2MwUVY4QVZiWjdHN3lmYjRIb1RkR0x3TWxPR3IydG5ITXQ3dmY3cjNHLWRVdUhLUngwdTZfTVFteWVSNEtQeDhzY1Y5VG83WlhtejFSZEhVT29Nam9EWmZyQkhDU01pa1lLYkNyZGtzaWlWSncxbzdkMllYLV83UVBweGFPT09ONDI3a2tzQmpkQ3VPNkJLeWJEYUMyVDFrUG12S1ZPTXhlU2dfT0dvREc1dEVVcHFFWFZzeHFpTzVSanNSSEFCQk9ZWWJfbDdINW1Vdw=='],
                 'visitor_data': 'CgtxV293aXRrNXVEay4=', 
             }
