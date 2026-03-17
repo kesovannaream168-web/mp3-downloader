@@ -1,4 +1,5 @@
 import os
+import time
 from flask import Flask, request, render_template, send_file
 import yt_dlp
 
@@ -20,13 +21,14 @@ def download():
 
     outtmpl = os.path.join(download_path, '%(title)s.%(ext)s')
 
-    # FIXED: Indentation now correctly inside the download() function
+    # Adding a small delay to mimic human behavior
+    time.sleep(1)
+
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': outtmpl,
-        # REMOVE the global 'cookiefile' line or set it to None here
         'noplaylist': True,
-        'user_agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Mobile/15E148 Safari/604.1',
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
@@ -34,12 +36,10 @@ def download():
         }],
         'extractor_args': {
             'youtube': {
-                'player_client': ['ios'],
+                'player_client': ['web'],
                 'skip': ['authcheck'],
-                # This ensures we don't send cookies to the iOS client, 
-                # which fixes the 'Skipping client ios' warning
-                'no_cookies': True, 
-                'po_token': ['web+missing_pot']
+                # YOUR TOKEN APPLIED HERE
+                'po_token': ['web+Cgtqb2Zla1lkd0ppdyjM8OLNBjIKCgJLSBIEGgAgRGLfAgrcAjE2LllUPTVNSmIxQVV4ZHVMczNIN0JXZWo5RVlYS0pmaVMtNUMxNzRJNWIzRXJXQnZVYWh2Ml9fWmJFRDNYYUtzR0p6SXFMbU0xVXFFVTliZVF2Mnh6bGxxZ29heWxheUFXLVVwT3R2OGRwaklSSW53NGdRaW9ZV293aXRrNXVEa1lBWkJnNkxJMjV5QVlYb2MwUVY4QVZiWjdHN3lmYjRIb1RkR0x3TWxPR3IydG5ITXQ3dmY3cjNHLWRVdUhLUngwdTZfTVFteWVSNEtQeDhzY1Y5VG83WlhtejFSZEhVT29Nam9EWmZyQkhDU01pa1lLYkNyZGtzaWlWSncxbzdkMllYLV83UVBweGFPT09ONDI3a2tzQmpkQ3VPNkJLeWJEYUMyVDFrUG12S1ZPTXhlU2dfT0dvREc1dEVVcHFFWFZzeHFpTzVSanNSSEFCQk9ZWWJfbDdINW1Vdw%3D%3D'],
             }
         },
     }
@@ -47,12 +47,10 @@ def download():
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(video_url, download=True)
-            # Find the actual path and ensure it points to the final .mp3
             file_path = ydl.prepare_filename(info).rsplit('.', 1)[0] + '.mp3'
             
             return send_file(file_path, as_attachment=True)
     except Exception as e:
-        # Logs the specific error to Render so you can see why it failed
         print(f"Download Error: {str(e)}")
         return f"Error: {str(e)}", 500
 
