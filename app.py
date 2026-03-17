@@ -18,14 +18,13 @@ def download():
     if not os.path.exists(download_path):
         os.makedirs(download_path)
 
-    # Indentation Fixed: This must be inside the download function
     outtmpl = os.path.join(download_path, '%(title)s.%(ext)s')
 
+    # FIXED: Indentation now correctly inside the download() function
     ydl_opts = {
-        # 'bestaudio' is sometimes hidden; asking for general 'best' helps bypass blocks
-        'format': 'bestaudio/best', 
+        'format': 'bestaudio/best',
         'outtmpl': outtmpl,
-        'cookiefile': 'cookies.txt', # Ensure this 22KB file is in your repo
+        'cookiefile': 'cookies.txt',
         'noplaylist': True,
         'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
         'postprocessors': [{
@@ -35,25 +34,25 @@ def download():
         }],
         'extractor_args': {
             'youtube': {
-                'player_client': ['ios', 'mweb'], # Most stable clients for PO tokens
+                'player_client': ['ios', 'mweb', 'android'],
                 'skip': ['authcheck'],
-                'po_token': ['web+missing_pot'] # Key 2026 bypass
+                'po_token': ['web+missing_pot']
             }
         },
     }
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            # extract_info is now correctly indented inside the 'with' block
             info = ydl.extract_info(video_url, download=True)
-            # Find the actual path of the created mp3
+            # Find the actual path and ensure it points to the final .mp3
             file_path = ydl.prepare_filename(info).rsplit('.', 1)[0] + '.mp3'
             
             return send_file(file_path, as_attachment=True)
     except Exception as e:
+        # Logs the specific error to Render so you can see why it failed
+        print(f"Download Error: {str(e)}")
         return f"Error: {str(e)}", 500
 
 if __name__ == '__main__':
-    # Render uses the PORT environment variable
     port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
