@@ -24,9 +24,9 @@ def download():
     ydl_opts = {
         'format': 'bestaudio/best',
         'outtmpl': outtmpl,
-        'cookiefile': 'cookies.txt',
+        # REMOVE the global 'cookiefile' line or set it to None here
         'noplaylist': True,
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+        'user_agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Mobile/15E148 Safari/604.1',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
@@ -34,9 +34,11 @@ def download():
         }],
         'extractor_args': {
             'youtube': {
-                # Focusing on 'ios' helps bypass the '429' and 'format not available' errors
-                'player_client': ['ios'], 
+                'player_client': ['ios'],
                 'skip': ['authcheck'],
+                # This ensures we don't send cookies to the iOS client, 
+                # which fixes the 'Skipping client ios' warning
+                'no_cookies': True, 
                 'po_token': ['web+missing_pot']
             }
         },
